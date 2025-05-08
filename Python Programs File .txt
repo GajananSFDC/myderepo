@@ -1,0 +1,205 @@
+'''
+Program to Print 1 to N Number 
+
+N = int(input("Enter The Number"))
+for i in range(1, N + 1):
+    print(i)
+-----------------------------------------------------
+
+#Program to Print 1 to N Number in Reverse Order
+
+N = int(input("Enter The Number:-"))
+for i in range(N, 0, -1):
+    print(i)
+--------------------------------------------------------    
+#Program to print addition of 1 to N number 
+
+N = int(input("Enter The Number:-"))
+
+total = 0
+for i in range(1, N + 1):
+    total += i
+print("The Addition At The End IS:-", total)
+
+----------------------------------------------------------------
+
+#Program to find Entered Number is Even or ODD
+
+N = int(input("Enter the Number:-"))
+if N % 2 == 0:
+    print("The Entered Number is Even!")
+else:
+    print("The Entered Number is ODD!")
+
+----------------------------------------------------------------
+
+#Program to do Math Calculation of TWO Number
+
+A = int(input("Enter The First Number:-"))
+B = int(input("Enter The Second Number:-"))
+
+Sum =  A + B
+Sub = A - B
+Mult = A * B
+Div = A / B
+Squere_A = A ** 2
+Cube = A ** 3
+
+print("The Addition of", A ,"and", B, "is", Sum)
+print("The Subtraction of", A ,"and", B, "is", Sub)
+print("The Multiplication of", A ,"and", B, "is", Mult)
+print("The Division of", A ,"and", B, "is", Div)
+print("The Squre of", A, "is", Squere_A)
+print("The Cube of", A, "is", Cube)
+
+----------------------------------------------------------------
+
+# Program to find Factorial of Number
+
+N = int(input("Enter The Number"))
+
+factorial = 1
+if N < 0:
+    print("Cant Calculate Factorial of number less than Zero")
+elif N == 0:
+    print("Factorial of Zero Is:-", 1)
+else:
+    for i in range(1, N + 1):
+        factorial *= i
+    print("The Factorial of Entered Number is:-", factorial)
+
+----------------------------------------------------------------
+
+# Program to find that entered Number is Strong Number or Not?
+
+import math
+
+N = int(input("Enter The Number:-"))
+original_num = N
+Sum_Of_Factorials = 0
+
+while N > 0:
+    digit = N % 10
+    Sum_Of_Factorials += math.factorial(digit)
+    N = N //10
+
+if Sum_Of_Factorials == original_num:
+    print(original_num, "is Strong Number!")
+else:
+    print(original_num, "Is Not Strong Number")
+----------------------------------------------------------------
+
+#Program to swap the Number with Temp Veriable
+
+A = int(input("Enter The Value of A:-"))
+B =  int(input("Enter The Value of B:-"))
+
+print("Number Before Swapping A =", A , "B =", B)
+
+temp = A
+A = B
+B = temp
+
+print("Number After Swapping A =", A, "B =", B)
+----------------------------------------------------------------
+
+#Program to swap the Number without Temp Veriable 
+
+A = int(input("Enter The Value Of A:-"))
+B = int(input("Enter The Value of B:-"))
+
+print("Before Swapping A =", A, "B =", B)
+
+A, B = B, A
+
+print("After Swapping A = ", A, "B =", B)
+
+----------------------------------------------------------------
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
