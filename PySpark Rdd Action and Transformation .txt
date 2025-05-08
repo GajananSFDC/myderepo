@@ -1,0 +1,59 @@
+PySpark Actions and Transformation:-
+----------------------------------------------------------------------------------------------------------
+Initiating SparkSession
+
+from pyspark.sql import SparkSession
+	
+spark = SparkSession.builder.appName("TestApp").getOrCreate()
+sc = spark.sparkContext
+----------------------------------------------------------------------------------------------------------
+Creating Rdd With parallelize
+
+rdd = sc.parallelize([1,2,3,4,5])
+print(rdd.collect())      ------------- Collect Action to Print Result 
+----------------------------------------------------------------------------------------------------------
+Map Transformation
+
+rdd1 = rdd.map(lambda x: x+2) ---------------- for every x add 2 in it 
+print(rdd1.collect())
+----------------------------------------------------------------------------------------------------------
+Filter Transformation
+
+rdd2 = rdd.filter(lambda x: x > 1) ------------- filter out the 1 and show value greater than 1 
+print(rdd2.collect())
+----------------------------------------------------------------------------------------------------------
+FlatMap Transformation
+
+rdd3 = rdd.flatMap(lambda x: range(1,x)) ----------- create and show value from 1 to x-1
+print(rdd3.collect())
+----------------------------------------------------------------------------------------------------------
+Distinct Transformation
+
+disrdd = sc.parallelize([1,2,2,3,3,5,7,1,9,14,11])
+rdd4 = disrdd.distinct()    ---------------------------- Show Unique Value 
+print(rdd4.collect())
+----------------------------------------------------------------------------------------------------------
+Union Transformation
+
+un1 = sc.parallelize([1,2,3,"b"])
+un2 = sc.parallelize(["a","b","c",2])
+unrdd = un1.union(un2) ----------------------- Show all the Values Present in Both
+print(unrdd.collect())
+----------------------------------------------------------------------------------------------------------
+Intersection Transformation
+
+interrdd = un1.intersection(un2) ---------------- show Only Values Present in both 
+print(interrdd.collect())
+----------------------------------------------------------------------------------------------------------
+Reduce Action     
+
+rdd.reduce(lambda x,y: x+y) -------------- do the Addition of all the Element in List
+----------------------------------------------------------------------------------------------------------
+Take Action 
+
+rdd.take(4)     ---------------------- Take Only First 4 Element 
+----------------------------------------------------------------------------------------------------------
+First Action 
+
+rdd.first() - -------------------------- Show First Element of List
+----------------------------------------------------------------------------------------------------------
