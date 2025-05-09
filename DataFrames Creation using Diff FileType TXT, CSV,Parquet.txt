@@ -1,0 +1,52 @@
+DataFrames Creation using Diff FileType. txt, csv, Parquet
+==========================================================================================================================
+Initilize the SparkSession
+-------------------------------
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+	
+spark = SparkSession.builder.appName("RDD to DF").getOrCreate()
+sc = spark.sparkContext
+
+=============================================================================================================================
+Creating rdd by Parallelize method then Converting into DataFrame
+
+firstrdd = sc.parallelize(range(1, 11)).map(lambda x: (x, "df data"))
+print(firstrdd.collect())
+-
+firstdf = firstrdd.toDF(["id","sample_string"]) -------------- Converting rdd to DataFrame
+print(firstdf.show())
+==========================================================================================================================
+**Creating DataFrame by Providing Schema to RDD**
+-------------------------------------------------
+studrdd = sc.parallelize((Row(1, "Amar", 2), Row(2, "Akbar", 3), Row(3, "Anthony", 24)))
+studrdd.collect()
+
+schema1 = StructType([
+    StructField("Id", IntegerType(), True),
+    StructField("name", StringType(), True),
+    StructField("marks", IntegerType(), True)
+])
+
+studdf = spark.createDataFrame(studrdd, schema1)
+print(studdf.show())
+==========================================================================================================================
+
+**Creating DataFrame Using Text File**
+-----------------------------------------
+movierdd = sc.textFile("file:///C:/Users/Gaju%20Gawande/Downloads/Movies.txt")
+print(movierdd.collect())
+---
+moviedf = movierdd,map(lambda x: x.split(',')).map(lambda x: Movies(x(0).toInt,x(1),x(2),x(3).toInt)).toDF
+moviedf.show()
+==========================================================================================================================
+**Creating DataFrame Using CSV File When Header is Present**
+
+moviedf = spark.read.option("header","true"). option("inferschema","true").csv("file:///C:/Users/Gaju%20Gawande/Downloads/Movies.csv")
+moviedf.show()
+==========================================================================================================================
+**Creating DataFrame Using Parquet File**
+
+moviedf = spark.read.load("file:///C:/Users/Gaju%20Gawande/Downloads/Movies.parquet")
+moviedf.show()
