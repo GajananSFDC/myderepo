@@ -1,0 +1,95 @@
+Window Function of Spark
+-------------------------------------------------------------------------------------------------
+Initilize SparkSession:-
+-----------------------------
+from pyspark.sql import SparkSession
+from pyspark.sql.window import Window
+from pyspark.sql.functions import *
+
+spark = SparkSession.builder.appName("WindowFunction").getOrCreate()
+=======================================================================================================================
+Creating Sample Data To Work On:-
+------------------------------------------------------------------------------------------
+data = [("IT", "Ajay", 50000),
+        ("HR", "Megha", 60000),
+        ("Sales","Raman",65000),
+        ("Account", "Smitha", 70252),
+        ("IT", "Karuna", 95202),
+        ("IT","Tarun",65565),
+        ("HR", "Gayatri", 956352),
+        ("Sales", "Mohan", 68542),
+        ("Account", "Rohan", 6554545),
+        ("IT", "Kartik", 50000)
+        ]
+=======================================================================================================================
+Creating DataFrame Out of Above Data:-
+-------------------------------------------------
+df = spark.createDataFrame(data,["Department","Employee","Salary"])
+df.show()
+=======================================================================================================================
+1. row_number():-
+				Assign Unique Row Number to Row Within the Partition.
+----------------------------------------------------------------------
+windowSpec = Window.partitionBy("Department").orderBy(df["Salary"].desc())
+df.withColumn("index",row_number().over(windowSpec)).show()
+
+here:-
+		windowSpec --- Veriable Name where we are storing the result of it.
+		Window ------- Keyword Saying that we are Working With Window Function. 
+		PartitionBy--- Of Which Column Partition We Want to do.
+		OrderBy ------ to which column we want to sort.
+		withColumn---- new column which we wanting to create.
+		row_number()-- Function name on which we are working.
+		over --------- on which Veriable we are Working.
+		show()-------- To Show the Result 
+=======================================================================================================================
+2. rank():-
+	---- It Will Rank the Rows inside the Partition, Gaps are allowed.
+	---- if 4 rows are there and first two rows salary(which is orderby column) is
+		 similar then it will give both row as 1st rank and skip 2nd rank and give 3rd rank to next row
+--------------------------------------------------------------------
+rankfunction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("index", rank().over(rankfunction)).show()
+-----------------------------------------------------------------------
+2nd Example:-
+
+againrank = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("NewColumn", rank().over(againrank)).show()
+=======================================================================================================================
+3. dense_rank():-
+				It Will rank the rows inside the partition, No Gaps Are Allowed.
+-------------------------------------------------------------------------------
+densrankfuction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("index",dense_rank().over(densrankfuction)).show()
+=======================================================================================================================
+4. Lead(Column, offset):-
+						Gives the Value from Next Row or Gives Next Value.
+-------------------------------------------------------------------------
+leadfunction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("Next_Year", lead("Salary", 1).over(leadfunction)).show()
+=======================================================================================================================
+5. Lag(Column, offset):-
+						Gives the Previous Value from previous row.
+-------------------------------------------------------------------------
+lagfunction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("Prev_Year",lag("Salary", 1).over(lagfunction)).show()
+=======================================================================================================================
+		Both Lead and Lag Combine:-
+--------------------------------------------------------------------
+from pyspark.sql.functions import rank, dense_rank, lead, lag
+laglead = Window.partitionBy("Department").orderBy(df["Salary"].desc())
+df.withColumn("Next_Year",lead("Salary", 1).over(laglead)) \                       \----- move the control on next line 
+  .withColumn("Prev_Year",lag("Salary", 1).over(laglead)).show()
+=======================================================================================================================
+6. Sum():-
+		Gives the Running Total in the Rows.
+-------------------------------------------------
+sumfunction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("Total_Salary",sum("Salary").over(sumfunction)).show()
+=======================================================================================================================
+7. Avg():-
+			Gives The Average in the rows.
+--------------------------------------------------
+avgfunction = Window.partitionBy("Department").orderBy(df["Salary"].asc())
+df.withColumn("Avg_Salary", avg("Salary").over(avgfunction)).show()
+=======================================================================================================================
