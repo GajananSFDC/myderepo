@@ -1,0 +1,59 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.functions import when, sum, count, row_number
+from pyspark.sql.window import Window
+spark = SparkSession.builder.appName("Optimization Technique").getOrCreate()
+sc = spark.sparkContext
+===================================================================================================================================
+**Q. Read the orders.csv, customers.csv, and products.csv using .read.csv() 
+with header and schema inference.**
+
+orders = spark.read.option("header", True).option("inferSchema", True).csv("Orders.csv")
+orders.show()
+
+customer = spark.read.option("header", True).option("inferSchema", True).csv("Customer.csv")
+customer.show()
+
+product = spark.read.option("header", True).option("inferSchema", True).csv("Product.csv")
+product.show()
+===================================================================================================================================
+**Q. Join orders with customers on cust_id. What type of join did you use?**
+
+orderscust = orders.join(customer, on ="cust_id", how = "inner")
+orderscust.show()
+===================================================================================================================================
+**Q. Add a new column called high_value:** 
+
+orderscust = orderscust.withColumn("high_value", when(orderscust["amount"] > 5000, "Yes").otherwise("No"))
+orderscust.show()
+
+===================================================================================================================================
+**Q. Perform groupBy() on region and gender: 1.Count total orders
+2.Sum Total Revenue**
+
+agg_df = orderscust.groupBy("region", "gender").agg(
+    count("order_id").alias("total_orders"),
+    sum("amount").alias("total_revenue"))
+===================================================================================================================================
+**Q.  Using row_number(), find the top customer by amount in each region.**
+
+window_spec = Window.partitionBy("region").orderBy(orderscust["amount"].desc())
+
+ranked_customers = orderscust.withColumn("rank", row_number().over(window_spec)) \
+                                   .filter("rank = 1") \
+                                   .select("region", "cust_id", "name", "amount", "rank")
+===================================================================================================================================
+**Q.  Write the final DataFrame to Parquet, partitioned by region.**
+
+final_output.write.mode("overwrite").partitionBy("region").parquet("output/final_sales")
+
+===================================================================================================================================
+**Q. Use .explain() to print the execution plan for both the aggregation and window 
+operations.**
+
+print("Aggregation Plan:")
+agg_df.explain()
+
+print("Top Customer Ranking Plan:")
+ranked_customers.explain()
+===================================================================================================================================
