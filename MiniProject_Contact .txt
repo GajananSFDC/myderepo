@@ -1,0 +1,51 @@
+#Mini Project of Creating Contact and Showing as Per the Choice From User:-
+
+#Step 1. Function for Creating Contact 
+
+def save_contact(name, phone, email):
+  with open("contacts.txt", "a") as file:
+    file.write(f"{name},{phone},{email} \n")
+  print("Contact Saved Successfullly.")
+
+#Step 2. Function for Showing Saved Contacts
+
+
+def show_contact():
+  print("\n Saved Contacts Are:- \n")
+  with open("contacts.txt", "r") as file:
+    for line in file:
+      name, phone, email = line.strip().split(",")
+      print(f"Name: {name}, Phone: {phone}, Email: {email}")
+
+#Step 3. Function to Choose What Operation You Want to Perform.
+
+
+def main():
+  while True:
+    print("\n Contact Book Menu:-")
+    print("1. Save Contact")
+    print("2. Show Contact")
+    print("3. Exit")
+
+    choice = input("Enter Your Choice:- ")
+
+    if choice == "1":
+      name = input("Enter Name:- ")
+      phone = input("Enter Phone Number:-")
+      email = input("Enter Email:- ")
+      save_contact(name, phone, email)
+
+    elif choice == "2":
+      show_contact()
+
+    elif choice == "3":
+      print("Getting Out Of The Prgram.")
+      break
+
+    else:
+      print("Invalid Choice Try Again.")
+
+
+# Calling Main Function to Execute 
+main()
+
