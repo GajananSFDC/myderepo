@@ -1,0 +1,117 @@
+Project 
+
+Title:- Olympic 2021 Data 
+Deatils :- The Project is Like we have to take the data from Git Repo(Which is out Data Soure in This Project) then 
+	----	with the Help of data factory by creating pipelines and linked services and properties move that raw data into ADLS Container's Folder 
+	----	then by Using DataBricks transform that data and then move that transformed data into ADLS Other Folder then 
+	----	by Azure Synaps Create the Tables of those data and perform the SQL and Other Operation on that data then 
+	----	create the dashboard by PowerBi or any other tool if you want.
+			
+Steps:-
+
+Step 1.	Create Storage Account of ADLS gen2 and Containers.
+			--- Create Two Folders in it 
+				-- 1. raw_data 
+				-- 2. transformed_data
+
+Step 2. Create Data Factory 
+		In Data Factory 
+		-- Create Pipeline for all tables or files 
+		-- create HTTP Linked Services for them 
+		-- Validate & Debug All
+
+Step 3. Create DataBricks Resource 
+		-- Create Compute in it.
+		-- go to Azure search App Registration and do it.
+		-- Create WorkBook(Project_Olympic) For Transformation Coding. 
+		-- give the Access to Created App by Contractual Blob Container.
+
+Step 4. Create Azure Synaps Resource 
+		-- Create Lake DataBase 
+		-- Create Tables in it
+		-- Validate & Publish All 
+		-- Check With SQL Query 
+===============================================================================================================================
+DataBricks WorkBook:-
+
+To Import the Things in Spark:-
+-------------------------------------
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType, DoubleType, BooleanType, DateType
+--------------------------------------------------------------------------------------------------------------------------------
+To Connect To App and Container:- 
+-------------------------------------
+configs = {"fs.azure.account.auth.type": "OAuth",
+"fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+"fs.azure.account.oauth2.client.id": "a7ed3c96-90e4-4e06-9be0-2a8941831e86",
+"fs.azure.account.oauth2.client.secret": 'fmt8Q~V8s4RMvCdMVJnYOJtT323UNZrE2.qESbwO',
+"fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/cdec158c-64c0-4245-8f05-873334d51916/oauth2/token"}
+
+
+dbutils.fs.mount(
+source = "abfss://projectcontainerde@projectstoragede.dfs.core.windows.net", # contrainer@storageacc
+mount_point = "/mnt/tokyoolymic",
+extra_configs = configs)		
+--------------------------------------------------------------------------------------------------------------------------------
+To Check the Mounted Path or Destination path on DataBrick we Can Say:-
+------------------------------------------------------------------------
+%fs
+ls "/mnt/tokyoolymic"
+--------------------------------------------------------------------------------------------------------------------------------
+To Enable SparkSession and All:-
+----------------------------------------
+spark
+--------------------------------------------------------------------------------------------------------------------------------
+This Command We Are using to see whats their in out directory or to find correct path:-
+----------------------------------------------------------------------------------------
+%fs ls "/mnt/tokyoolymic/raw-data"
+--------------------------------------------------------------------------------------------------------------------------------
+To Load All the Data to DataBrick:-
+---------------------------------------
+athletes = spark.read.format("csv").option("header","true").option("inferSchema","true").load("/mnt/tokyoolymic/raw-data/ Athletesraw.csv")
+coaches = spark.read.format("csv").option("header","true").option("inferSchema","true").load("/mnt/tokyoolymic/raw-data/Coachesraw.csv")
+entriesgender = spark.read.format("csv").option("header","true").option("inferSchema","true").load("/mnt/tokyoolymic/raw-data/EntriesGenderraw.csv")
+medals = spark.read.format("csv").option("header","true").option("inferSchema","true").load("/mnt/tokyoolymic/raw-data/Medalsraw.csv")
+teams = spark.read.format("csv").option("header","true").option("inferSchema","true").load("/mnt/tokyoolymic/raw-data/Teamsraw.csv")
+--------------------------------------------------------------------------------------------------------------------------------
+TO See all Data is Correctly Loaded or not check for all tables like this:-
+--------------------------------------------------------------------------------
+athletes.show()
+---------------------------------------------------------------------------------------------------------------------------------
+Then Check For all Tables Schema:-
+---------------------------------------
+athletes.printSchema()
+---------------------------------------------------------------------------------------------------------------------------------     
+Manual Identification of the data type of the columns and casting them and other way is to use inferSchema:-
+------------------------------------------------------------------------------------------------------------
+entriesgender = entriesgender.withColumn("Female", col("Female").cast(IntegerType()))\
+    .withColumn("Male", col("Male").cast(IntegerType()))\
+    .withColumn("Total", col("Total").cast(IntegerType()))
+---------------------------------------------------------------------------------------------------------------------------------
+Find the top countries with the highest number of gold medals:-
+----------------------------------------------------------------------
+top_gold_medal_countries = medals.orderBy("Gold", ascending=False).select("TeamCountry","Gold").show()
+---------------------------------------------------------------------------------------------------------------------------------
+Calculate the average number of entries by gender for each discipline:-
+-------------------------------------------------------------------------
+average_entries_by_gender = entriesgender.withColumn(
+    'Avg_Female', entriesgender['Female'] / entriesgender['Total']
+).withColumn(
+    'Avg_Male', entriesgender['Male'] / entriesgender['Total']
+)
+average_entries_by_gender.show()
+-----------------------------------------------------------------------------------------------------------------------------------
+Repartitioning:-
+--------------------
+athletes.repartition(1).write.mode("overwrite").option("header",'true').csv("/mnt/tokyoolymic/transform-data/athletes")
+coaches.repartition(1).write.mode("overwrite").option("header","true").csv("/mnt/tokyoolymic/transform-data/coaches")
+entriesgender.repartition(1).write.mode("overwrite").option("header","true").csv("/mnt/tokyoolymic/transform-data/entriesgender")
+medals.repartition(1).write.mode("overwrite").option("header","true").csv("/mnt/tokyoolymic/transform-data/medals")
+teams.repartition(1).write.mode("overwrite").option("header","true").csv("/mnt/tokyoolymic/transform-data/teams")
+----------------------------------------------------------------------------------------------------------------------------------
+    
+
+=================================================================================================================================	
+
+
+lazy evaluation --- need to study 
