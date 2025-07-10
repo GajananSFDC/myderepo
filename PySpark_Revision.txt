@@ -1,0 +1,246 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.functions import col
+from pyspark.sql.functions import avg, sum, min, max, count, countDistinct, when, lit
+from pyspark.sql.window import Window
+from pyspark.sql.functions import *
+spark = SparkSession.builder.appName("Revision").getOrCreate()
+sc = spark.sparkContext
+
+**RDD**
+
+Create RDD With Parallelize Method:-
+
+Number = [1,2,3,4,5,6,7,8,9,10]
+
+Number_rdd = spark.sparkContext.parallelize(Number)
+Number_rdd.collect()
+----------------------------------------------------------------------------
+Create Rdd From TextFile
+
+Text_rdd = spark.sparkContext.textFile("Sample.txt")
+----------------------------------------------------------------------------
+Create Rdd and Then Count the Line in the File
+
+Text_rdd = spark.sparkContext.textFile("Sample.txt")
+Text_rdd.count()
+----------------------------------------------------------------------------
+Create an RDD from a list of numbers (1 to 10) and filter only even numbers.
+
+Even_rdd = Number_rdd.filter(lambda x: x%2==0)
+Even_rdd.collect()
+----------------------------------------------------------------------------
+Create Rdd of Text file and Calculate how Many Words Are there in File
+
+word_rdd = spark.sparkContext.textFile("Sample.txt").flatMap(lambda x: x.split(" "))
+word_rdd.count()
+----------------------------------------------------------------------------
+Calculate Word in Each Line
+
+text_rdd = spark.sparkContext.textFile("Sample.txt")
+word_count_per_line = text_rdd.map(lambda line: len(line.split()))
+word_count_per_line.collect()
+----------------------------------------------------------------------------
+Perform a map and reduce operation to calculate sum of squares.
+
+squre_rdd = Number_rdd.map(lambda x: x * x)
+squre_rdd.collect()
+----------------------------------------------------------------------------
+squre_rdd.cache()
+====================================================================================================================================
+# **DataFrame:-**
+----------------------------------------------------------------------------
+Create a DataFrame from a CSV file and display its schema.
+
+
+df = spark.read.csv("orders.csv", header = True)
+df.show()
+df.printSchema()
+
+edf = spark.read.csv("Employee.csv", header = True)
+edf.show()
+----------------------------------------------------------------------------
+Filter all rows where salary > 50000.
+
+
+filter_df = edf.filter(col("Salary") > 50000)
+filter_df.show()
+----------------------------------------------------------------------------
+Add a new column called "bonus" = salary * 0.1
+
+add_df = edf.withColumn("Bonus", edf["Salary"] * 0.1)
+add_df.show()
+----------------------------------------------------------------------------
+Drop a column from DataFrame.
+
+ddf = add_df.drop("Bonus")
+ddf.show()
+----------------------------------------------------------------------------
+Show the top 5 rows of DataFrame.
+
+edf.show(5)
+===================================================================================================================================
+# **ACTIONS**
+
+Use .collect() to print all elements of an RDD.
+
+emp = [2,6,5,46,2,5,18,92,87,15,8,4,6]
+emp_rdd = spark.sparkContext.parallelize(emp)
+emp_rdd.collect()
+----------------------------------------------------------------------------
+Count the number of records in a DataFrame.
+
+
+edf.count()
+----------------------------------------------------------------------------
+Use .take(3) to get the first 3 rows of an RDD.
+
+
+emp_rdd.take(3)
+----------------------------------------------------------------------------
+Use .first() to fetch the first record from DataFrame.
+
+
+edf.first()
+----------------------------------------------------------------------------
+Save an RDD or DataFrame to a text or CSV file.
+
+
+emp_rdd.saveAsTextFile("emp.txt")
+===================================================================================================================================
+# **TransFormations**
+
+Use map() to multiply all numbers in RDD by 2.
+
+
+mul_rdd = emp_rdd.map(lambda x: x * 2)
+mul_rdd.collect()
+----------------------------------------------------------------------------
+Use filter() to select only names starting with “A”.
+
+
+a_df = edf.filter(col("Name").startswith("A"))
+a_df.show()
+----------------------------------------------------------------------------
+rdd1 = spark.sparkContext.parallelize("Employee.csv")
+----------------------------------------------------------------------------
+Use flatMap() to split sentences into words.
+
+
+w_rdd = rdd1.flatMap(lambda x: x.split(" "))
+w_rdd.collect()
+----------------------------------------------------------------------------
+Use distinct() to get unique cities from a DataFrame.
+
+
+ddf = edf.select("City").distinct()
+ddf.show()
+----------------------------------------------------------------------------
+c_df = spark.read.csv("customers.csv", header= True)
+c_df.show()
+
+o_df = spark.read.csv("orders.csv", header= True)
+o_df.show()
+----------------------------------------------------------------------------
+Use union() to merge two DataFrames.
+
+
+c_df.union(o_df).show()
+====================================================================================================================================
+# **Joins**
+
+employee = spark.createDataFrame([(1,"Ram"),(2,"Shyam"),(3,"Carry"),(4,"Nagesh")],["id","name"])
+
+department = spark.createDataFrame([(1,"HR"),(2,"IT"),(5,"Sales"),(6,"Account")],["id","Dept"])
+----------------------------------------------------------------------------
+Perform an inner join between employee and department DataFrames.
+
+employee.join(department, on="id" , how="inner").show()
+----------------------------------------------------------------------------
+Perform an Left Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "left").show()
+----------------------------------------------------------------------------
+Perform an Right Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "right").show()
+----------------------------------------------------------------------------
+Perform an Full Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "full").show()
+----------------------------------------------------------------------------
+employee_df = spark.read.csv("Employee.csv", header = True)
+employee_df.show()
+===================================================================================================================================
+# **AGGREGATIONS**
+
+Group employees by department and calculate average salary.
+
+
+employee_df.groupBy("Dept").agg(avg("Salary")).show()
+----------------------------------------------------------------------------
+Find max and min age from employee DataFrame.
+
+
+employee_df.groupBy("Dept").agg(min("Age"),
+                                max("Age")).show()
+----------------------------------------------------------------------------
+Use .agg() with multiple aggregation functions.
+
+employee_df.groupBy("Dept").agg(min("Age"),
+                                max("Age"),
+                                avg("Age"),
+                                sum("Age")).show()
+----------------------------------------------------------------------------
+Count how many employees earn more than 50000.
+
+employee_df.filter(col("Salary") > 50000).count()
+----------------------------------------------------------------------------
+Use groupBy().count() to count records per department.
+
+employee_df.groupBy("Dept").agg(count("*")).show()
+===================================================================================================================================
+# **WINDOW FUNCTIONS**
+
+Rank employees by salary within each department.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("Salary").desc())
+employee_df.withColumn("Rank", rank().over(WindowSpec)).show()
+----------------------------------------------------------------------------
+
+we can Use: 
+
+1. (df_Name["Column_Name"].asc/desc())            ---OR
+2. (col("Column_Name").asc/desc()) 
+
+if You are Using Df then Column_Name in  [] -- Squre Bracket 
+if You Are Using Col then Column_Name in () -- Round Bracket 
+----------------------------------------------------------------------------
+Gives the Value from Next City or Gives Next Value of City By Lead.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(employee_df["City"].asc())
+employee_df.withColumn("Lead", lead("City", 1).over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Gives the Value from Previous City or Gives Previous Value of City By Lag
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("City").asc())
+employee_df.withColumn("LAG", lag("City", 1).over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Use row_number() to assign row numbers per department.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("Name").asc())
+employee_df.withColumn("Row_Number", row_number().over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Calculate running total of salary using sum().over()
+
+WindowSpec = Window.orderBy(col("Salary").asc())
+employee_df.withColumn("Running_Total", sum("Salary").over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Calculate running total of salary using Avg().over()
+
+WindowSpec = Window.orderBy(col("Salary").asc())
+employee_df.withColumn("Running_Average", avg("Salary").over(WindowSpec)).show()
+===================================================================================================================================
