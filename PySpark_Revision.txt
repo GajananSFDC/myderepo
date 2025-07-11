@@ -1,0 +1,1000 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.functions import col
+from pyspark.sql.functions import avg, sum, min, max, count, countDistinct, when, lit
+from pyspark.sql.window import Window
+from pyspark.sql.functions import *
+spark = SparkSession.builder.appName("Revision").getOrCreate()
+sc = spark.sparkContext
+
+**RDD**
+
+Create RDD With Parallelize Method:-
+
+Number = [1,2,3,4,5,6,7,8,9,10]
+
+Number_rdd = spark.sparkContext.parallelize(Number)
+Number_rdd.collect()
+----------------------------------------------------------------------------
+Create Rdd From TextFile
+
+Text_rdd = spark.sparkContext.textFile("Sample.txt")
+----------------------------------------------------------------------------
+Create Rdd and Then Count the Line in the File
+
+Text_rdd = spark.sparkContext.textFile("Sample.txt")
+Text_rdd.count()
+----------------------------------------------------------------------------
+Create an RDD from a list of numbers (1 to 10) and filter only even numbers.
+
+Even_rdd = Number_rdd.filter(lambda x: x%2==0)
+Even_rdd.collect()
+----------------------------------------------------------------------------
+Create Rdd of Text file and Calculate how Many Words Are there in File
+
+word_rdd = spark.sparkContext.textFile("Sample.txt").flatMap(lambda x: x.split(" "))
+word_rdd.count()
+----------------------------------------------------------------------------
+Calculate Word in Each Line
+
+text_rdd = spark.sparkContext.textFile("Sample.txt")
+word_count_per_line = text_rdd.map(lambda line: len(line.split()))
+word_count_per_line.collect()
+----------------------------------------------------------------------------
+Perform a map and reduce operation to calculate sum of squares.
+
+squre_rdd = Number_rdd.map(lambda x: x * x)
+squre_rdd.collect()
+----------------------------------------------------------------------------
+squre_rdd.cache()
+====================================================================================================================================
+# **DataFrame:-**
+----------------------------------------------------------------------------
+Create a DataFrame from a CSV file and display its schema.
+
+
+df = spark.read.csv("orders.csv", header = True)
+df.show()
+df.printSchema()
+
+edf = spark.read.csv("Employee.csv", header = True)
+edf.show()
+----------------------------------------------------------------------------
+Filter all rows where salary > 50000.
+
+
+filter_df = edf.filter(col("Salary") > 50000)
+filter_df.show()
+----------------------------------------------------------------------------
+Add a new column called "bonus" = salary * 0.1
+
+add_df = edf.withColumn("Bonus", edf["Salary"] * 0.1)
+add_df.show()
+----------------------------------------------------------------------------
+Drop a column from DataFrame.
+
+ddf = add_df.drop("Bonus")
+ddf.show()
+----------------------------------------------------------------------------
+Show the top 5 rows of DataFrame.
+
+edf.show(5)
+===================================================================================================================================
+# **ACTIONS**
+
+Use .collect() to print all elements of an RDD.
+
+emp = [2,6,5,46,2,5,18,92,87,15,8,4,6]
+emp_rdd = spark.sparkContext.parallelize(emp)
+emp_rdd.collect()
+----------------------------------------------------------------------------
+Count the number of records in a DataFrame.
+
+
+edf.count()
+----------------------------------------------------------------------------
+Use .take(3) to get the first 3 rows of an RDD.
+
+
+emp_rdd.take(3)
+----------------------------------------------------------------------------
+Use .first() to fetch the first record from DataFrame.
+
+
+edf.first()
+----------------------------------------------------------------------------
+Save an RDD or DataFrame to a text or CSV file.
+
+
+emp_rdd.saveAsTextFile("emp.txt")
+===================================================================================================================================
+# **TransFormations**
+
+Use map() to multiply all numbers in RDD by 2.
+
+
+mul_rdd = emp_rdd.map(lambda x: x * 2)
+mul_rdd.collect()
+----------------------------------------------------------------------------
+Use filter() to select only names starting with “A”.
+
+
+a_df = edf.filter(col("Name").startswith("A"))
+a_df.show()
+----------------------------------------------------------------------------
+rdd1 = spark.sparkContext.parallelize("Employee.csv")
+----------------------------------------------------------------------------
+Use flatMap() to split sentences into words.
+
+
+w_rdd = rdd1.flatMap(lambda x: x.split(" "))
+w_rdd.collect()
+----------------------------------------------------------------------------
+Use distinct() to get unique cities from a DataFrame.
+
+
+ddf = edf.select("City").distinct()
+ddf.show()
+----------------------------------------------------------------------------
+c_df = spark.read.csv("customers.csv", header= True)
+c_df.show()
+
+o_df = spark.read.csv("orders.csv", header= True)
+o_df.show()
+----------------------------------------------------------------------------
+Use union() to merge two DataFrames.
+
+
+c_df.union(o_df).show()
+====================================================================================================================================
+# **Joins**
+
+employee = spark.createDataFrame([(1,"Ram"),(2,"Shyam"),(3,"Carry"),(4,"Nagesh")],["id","name"])
+
+department = spark.createDataFrame([(1,"HR"),(2,"IT"),(5,"Sales"),(6,"Account")],["id","Dept"])
+----------------------------------------------------------------------------
+Perform an inner join between employee and department DataFrames.
+
+employee.join(department, on="id" , how="inner").show()
+----------------------------------------------------------------------------
+Perform an Left Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "left").show()
+----------------------------------------------------------------------------
+Perform an Right Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "right").show()
+----------------------------------------------------------------------------
+Perform an Full Outer join between employee and department DataFrames.
+
+employee.join(department, on = "id", how = "full").show()
+----------------------------------------------------------------------------
+employee_df = spark.read.csv("Employee.csv", header = True)
+employee_df.show()
+===================================================================================================================================
+# **AGGREGATIONS**
+
+Group employees by department and calculate average salary.
+
+
+employee_df.groupBy("Dept").agg(avg("Salary")).show()
+----------------------------------------------------------------------------
+Find max and min age from employee DataFrame.
+
+
+employee_df.groupBy("Dept").agg(min("Age"),
+                                max("Age")).show()
+----------------------------------------------------------------------------
+Use .agg() with multiple aggregation functions.
+
+employee_df.groupBy("Dept").agg(min("Age"),
+                                max("Age"),
+                                avg("Age"),
+                                sum("Age")).show()
+----------------------------------------------------------------------------
+Count how many employees earn more than 50000.
+
+employee_df.filter(col("Salary") > 50000).count()
+----------------------------------------------------------------------------
+Use groupBy().count() to count records per department.
+
+employee_df.groupBy("Dept").agg(count("*")).show()
+===================================================================================================================================
+# **WINDOW FUNCTIONS**
+
+Rank employees by salary within each department.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("Salary").desc())
+employee_df.withColumn("Rank", rank().over(WindowSpec)).show()
+----------------------------------------------------------------------------
+
+we can Use: 
+
+1. (df_Name["Column_Name"].asc/desc())            ---OR
+2. (col("Column_Name").asc/desc()) 
+
+if You are Using Df then Column_Name in  [] -- Squre Bracket 
+if You Are Using Col then Column_Name in () -- Round Bracket 
+----------------------------------------------------------------------------
+Gives the Value from Next City or Gives Next Value of City By Lead.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(employee_df["City"].asc())
+employee_df.withColumn("Lead", lead("City", 1).over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Gives the Value from Previous City or Gives Previous Value of City By Lag
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("City").asc())
+employee_df.withColumn("LAG", lag("City", 1).over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Use row_number() to assign row numbers per department.
+
+
+WindowSpec = Window.partitionBy("Dept").orderBy(col("Name").asc())
+employee_df.withColumn("Row_Number", row_number().over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Calculate running total of salary using sum().over()
+
+WindowSpec = Window.orderBy(col("Salary").asc())
+employee_df.withColumn("Running_Total", sum("Salary").over(WindowSpec)).show()
+----------------------------------------------------------------------------
+Calculate running total of salary using Avg().over()
+
+WindowSpec = Window.orderBy(col("Salary").asc())
+employee_df.withColumn("Running_Average", avg("Salary").over(WindowSpec)).show()
+===================================================================================================================================
+# **File Format**
+---------------------------------------------------------------------------------------------------
+Read data from a CSV file and display its content.
+
+reademp_df = spark.read.option("header", True).option("inferSchema", True).csv("Employee.csv")
+reademp_df.show()
+---------------------------------------------------------------------------------------------------
+Write a DataFrame as a JSON file.
+
+
+jsonwrite_df = reademp_df.write.json("Employee.json")
+---------------------------------------------------------------------------------------------------
+Convert CSV data to Parquet and save it.
+
+reademp_df.write.mode("overwrite").parquet("Employee.parquet")
+---------------------------------------------------------------------------------------------------
+Read a Parquet file and print its schema.
+
+parquet_df = spark.read.parquet("Employee.parquet")
+parquet_df.printSchema()
+parquet_df.show()
+==================================================================================================================================
+# **PARTITIONING**
+---------------------------------------------------------------------------------------------------
+Write a DataFrame partitioned by "department".
+
+
+data = [
+    ("Alice", "HR", 3000),
+    ("Bob", "IT", 4000),
+    ("Charlie", "HR", 3500),
+    ("David", "Finance", 4500),
+    ("Eve", "IT", 4200)
+]
+
+part_df = spark.createDataFrame(data, ["Name","Dept","Salary"])
+part_df.write.mode("overwrite").partitionBy("Dept").parquet("Emp.parquet")
+---------------------------------------------------------------------------------------------------
+Read a partitioned Parquet file and show partitions.
+
+
+read_df1 = spark.read.parquet("Emp.parquet")
+read_df1.show()
+---------------------------------------------------------------------------------------------------
+Use .repartition(4) to manually repartition a DataFrame.
+
+part_df.repartition(4).show()
+---------------------------------------------------------------------------------------------------
+Use .coalesce(2) to reduce the number of partitions.
+
+part_df.coalesce(2)
+==================================================================================================================================
+# **BUCKETING**
+---------------------------------------------------------------------------------------------------
+Bucketing doesn't work with .write.parquet() or .write.csv().
+You must enable Hive support and write to a table (even temporary).
+Use .format("parquet") or .format("csv") when saving as a bucketed table.
+---------------------------------------------------------------------------------------------------
+Write a DataFrame into 4 buckets by "employee_id".
+
+
+data = [
+    (1, "Alice", 3000),
+    (2, "Bob", 4000),
+    (3, "Charlie", 3500),
+    (4, "David", 4500),
+    (5, "Eve", 4200),
+    (6, "Frank", 4100),
+    (7, "Grace", 3900),
+    (8, "Helen", 4300)
+]
+
+buck_df = spark.createDataFrame(data, ["Id","Name","Salary"])
+buck_df.write.bucketBy(4, "Id").sortBy("Id").mode("overwrite").format("parquet").saveAsTable("Bucket_employee")
+---------------------------------------------------------------------------------------------------
+Create a table with bucketing enabled and load data into it.
+
+
+spark.table("Bucket_employee").show()
+
+---------------------------------------------------------------------------------------------------
+Use .bucketBy() and .sortBy() in write operation.
+
+
+data = [
+    (1, "Alice", 3000),
+    (2, "Bob", 4000),
+    (3, "Charlie", 3500),
+    (4, "David", 4500),
+    (5, "Eve", 4200),
+    (6, "Frank", 4100),
+    (7, "Grace", 3900),
+    (8, "Helen", 4300)
+]
+
+buck_df = spark.createDataFrame(data, ["Id","Name","Salary"])
+buck_df.write.bucketBy(4, "Id").sortBy("Id").mode("overwrite").format("parquet").saveAsTable("Bucket_employee")
+==================================================================================================================================
+# **UDFs (User Defined Functions)**
+---------------------------------------------------------------------------------------------------
+Create a UDF to convert names to uppercase.
+
+
+#Create DataFrame:-
+data = [(1, "alice"), (2, "bob"), (3, "charlie")]
+df = spark.createDataFrame(data, ["id", "name"])
+
+#define UDF Function:- 
+def to_upper(name):
+    return name.upper() if name else None
+
+#Register UDF:-
+to_upper_udf = udf(to_upper, StringType())
+
+#Apply UDF:- 
+df_with_upper = df.withColumn("name_upper", to_upper_udf(df["name"]))
+df_with_upper.show()
+---------------------------------------------------------------------------------------------------
+Write a UDF to calculate age from birth year.
+
+#create DataFrame:-
+data = [(1, "Alice", 1995), (2, "Bob", 2000), (3, "Charlie", 1988)]
+df = spark.createDataFrame(data, ["id", "name", "birth_year"])
+
+# Step 3: Define UDF to calculate age
+def calculate_age(birth_year):
+    current_year = datetime.datetime.now().year
+    return current_year - birth_year if birth_year else None
+
+# Step 4: Register UDF
+calculate_age_udf = udf(calculate_age, IntegerType())
+
+
+# Step 5: Apply UDF to DataFrame
+df_with_age = df.withColumn("age", calculate_age_udf(df["birth_year"]))
+df_with_age.show()
+---------------------------------------------------------------------------------------------------
+Use a UDF to check if salary > 50000, return "High"/"Low".
+
+
+#Create DataFrame:-
+
+data = [(1, "Alice", 60000),
+        (2, "Bob", 45000),
+        (3, "Charlie", 52000),
+        (4, "David", 30000)]
+
+df = spark.createDataFrame(data, ["id", "name", "salary"])
+
+#Define UDF:-
+def salary_level(sal):
+    return "High" if sal > 50000 else "Low"
+
+
+#Register UDF:-
+salary_level_udf = udf(salary_level, StringType())
+
+#Apply UDF:-
+df_with_salary_level = df.withColumn("salary_level", salary_level_udf(df["salary"]))
+df_with_salary_level.show()
+---------------------------------------------------------------------------------------------------
+Register a UDF and use it in SQL query.
+
+data = [(1, "alice"), (2, "bob"), (3, "charlie")]
+df = spark.createDataFrame(data, ["id", "name"])
+
+# Temp view create करें ताकि SQL से access हो सके
+df.createOrReplaceTempView("people")
+
+#Define UDF:-
+def to_upper(name):
+    return name.upper() if name else None
+
+#Register UDF:-
+spark.udf.register("toUpperUDF", to_upper, StringType())
+
+#Use SQL Query in UDF:-
+
+result = spark.sql("""
+    SELECT id, name, toUpperUDF(name) AS name_upper
+    FROM people
+""")
+
+result.show()
+---------------------------------------------------------------------------------------------------
+Write a UDF to reverse the string values.
+
+#Create DF:-
+data = [(1, "Alice"), (2, "Bob"), (3, "Charlie")]
+df = spark.createDataFrame(data, ["id", "name"])
+
+#Define Function:-
+def reverse_string(s):
+    return s[::-1] if s else None
+
+#Register UDF:-
+reverse_udf = udf(reverse_string, StringType())
+
+#Apply UDF:-
+df_with_reversed = df.withColumn("reversed_name", reverse_udf(df["name"]))
+df_with_reversed.show()
+===================================================================================================================================
+
+# **PERFORMANCE OPTIMIZATION**
+
+Enable Spark UI and observe the DAG of a job.
+
+#Step 1:- Initiate SaprkSession
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("SparkUIExample") \
+    .config("spark.ui.enabled", "true") \
+    .getOrCreate()
+
+#Step 2:- Run a Job to See DAG in Spark 
+
+df = spark.range(1, 1000000)
+result = df.filter("id % 2 == 0").groupBy().count()
+result.show()
+---------------------------------------------------------------------------------------------------
+Use .explain(True) to understand the physical plan of a DataFrame.
+
+#Initiate SaprkSession:-
+
+#Create DataFrame:-
+data = [(1, "Alice", 60000), (2, "Bob", 45000), (3, "Charlie", 52000)]
+df = spark.createDataFrame(data, ["id", "name", "salary"])
+
+#Transformation:-
+filtered_df = df.filter(df["salary"] > 50000)
+
+#Show Execution Plan:-
+filtered_df.explain(True)
+==================================================================================================================================
+# **CACHE**
+---------------------------------------------------------------------------------------------------
+Load a large dataset and cache it using .cache().
+
+#Initiate SparkSession 
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("Cache Example") \
+    .getOrCreate()
+
+#Create one DataSet:-
+# 10 million rows
+df = spark.range(1, 10000001).withColumnRenamed("id", "number")
+
+
+#Do Cache The DataSet:-
+df.cache()
+
+df.count()  # या df.show()
+df.show()
+---------------------------------------------------------------------------------------------------
+Perform multiple actions on cached DataFrame and note performance.
+
+
+#Load Big DataSet:-
+
+df = spark.range(1, 10000001).withColumnRenamed("id", "number")
+
+#Do the Cache:-
+
+df.cache()
+
+#Do Multiple Action on Cache:-
+
+# ⏱️ Action 1: Trigger caching
+start = time.time()
+df.count()
+print("⏱️ First count (cache triggers here):", time.time() - start)
+
+# ⏱️ Action 2: Filter + count
+start = time.time()
+df.filter("number % 2 == 0").count()
+print("⏱️ Even number count:", time.time() - start)
+
+# ⏱️ Action 3: Aggregate
+start = time.time()
+df.selectExpr("avg(number)", "sum(number)", "max(number)").show()
+print("⏱️ Aggregation time:", time.time() - start)
+
+# ⏱️ Action 4: Display few rows
+start = time.time()
+df.show(5)
+print("⏱️ Show top 5 rows:", time.time() - start)
+---------------------------------------------------------------------------------------------------
+Use is_cached property to verify if DataFrame is cached.
+
+#Create DataFrame:-
+df = spark.range(1, 1000001)  # 10 lakh rows
+
+#Check if Cached 
+print("Before caching:", df.is_cached)   # ➤ False
+
+#Cache The DataFrame:-
+
+df.cache()
+df.count()  # Trigger the cache
+---------------------------------------------------------------------------------------------------
+Unpersist a cached DataFrame using .unpersist().
+
+
+#Create DataFrame and Cache:-
+df = spark.range(1, 1000001)
+df.cache()
+df.count()  # Cache को trigger करें
+
+#Check if Cached?
+print("Before unpersisting:", df.is_cached)   # ➤ True
+
+#DO unPersist:-
+df.unpersist()
+
+#Check Cachet Status Again
+print("After unpersisting:", df.is_cached)   # ➤ False
+
+#ForceFully Remove From Memory:-
+df.unpersist(blocking=True)
+---------------------------------------------------------------------------------------------------
+Cache a DataFrame before a costly aggregation
+
+#Create DataFrame:-
+df = spark.range(1, 10000001).withColumnRenamed("id", "number")  # 1 करोड़ rows
+
+#Do Cache:-
+df.cache()
+df.count()  # Cache को trigger करें
+
+# Costly aggregation example (sum, avg, max)
+df.selectExpr("sum(number)", "avg(number)", "max(number)").show()
+
+# Second time — expected to be faster. Doing Aggrgation One More Time 
+df.selectExpr("sum(number)", "avg(number)", "max(number)").show()
+
+#Check Perfomance
+
+start = time.time()
+df.selectExpr("sum(number)", "avg(number)", "max(number)").show()
+print("⏱️ Aggregation Time:", time.time() - start)
+===================================================================================================================================
+# **PERSIST**
+---------------------------------------------------------------------------------------------------
+Load a dataset and persist it using persist(StorageLevel.MEMORY_AND_DISK).
+
+#Load and Create Large DataSet 
+df = spark.range(1, 10000001).withColumnRenamed("id", "number")  # 1 crore rows
+
+#Persist With The Memory and Disk
+df.persist(StorageLevel.MEMORY_AND_DISK)
+df.count()  # Trigger persist
+
+#Check if Persisted
+print("Is persisted?", df.is_cached)  # ➤ True (cache और persist दोनों में is_cached True return करते हैं)
+
+#Perform Some Action 
+df.filter("number % 2 == 0").count()
+df.selectExpr("avg(number)", "max(number)").show()
+
+#Unpersist When Done
+df.unpersist()
+---------------------------------------------------------------------------------------------------
+Persist a DataFrame and run two different aggregations on it.
+
+df = spark.range(1, 10000001).withColumnRenamed("id", "number")  # 1 करोड़ rows
+
+#Persist DataFrame:-
+df.persist(StorageLevel.MEMORY_AND_DISK)
+df.count()  # Trigger persist
+
+#Sum and Average
+
+agg1 = df.select(sum("number").alias("total_sum"), avg("number").alias("average"))
+agg1.show()
+
+
+#Count Even and Odd Numbers
+
+agg2 = df.select(
+    count(when(df["number"] % 2 == 0, True)).alias("even_count"),
+    count(when(df["number"] % 2 != 0, True)).alias("odd_count")
+)
+agg2.show()
+
+
+#UnPersist When Done
+df.unpersist()
+
+---------------------------------------------------------------------------------------------------
+Observe storage level with .storageLevel.
+
+#Create DataFrame:-
+df = spark.range(1, 1000001)
+
+#Persist it
+df.persist(StorageLevel.MEMORY_AND_DISK)
+df.count()  # Trigger persist
+
+#Check Storage Level:-
+print("Storage level of DF:", df.storageLevel)
+
+---------------------------------------------------------------------------------------------------
+Unpersist a persisted DataFrame and observe memory release.
+
+
+#Create and Persist DataFrame:-
+df = spark.range(1, 10000001)  # 1 crore rows
+df.persist(StorageLevel.MEMORY_AND_DISK)
+df.count()  # Trigger persist
+
+#Check Cache and Storage Status
+print("Is Cached Before Unpersist:", df.is_cached)          # ➤ True
+print("Storage Level Before Unpersist:", df.storageLevel)   # ➤ MEMORY_AND_DISK
+
+#Unperist DataFrame 
+df.unpersist()
+
+#Check Again After Unpersist
+print("Is Cached After Unpersist:", df.is_cached)            # ➤ False
+print("Storage Level After Unpersist:", df.storageLevel)     # ➤ StorageLevel(False, False, False, False, 1)
+
+==================================================================================================================================
+# **REPARTITION**
+
+Use .repartition(6) on a DataFrame and count the partitions.
+
+#Create DataFrame:-
+df = spark.range(1, 101).withColumnRenamed("id", "number")
+
+#Do Repartition:-
+df_repart = df.repartition(6)
+
+#Count RePartition 
+print("Total Partitions:", df_repart.rdd.getNumPartitions())
+---------------------------------------------------------------------------------------------------
+Repartition DataFrame based on a column like “department”.
+
+data = [
+    (1, "Alice", "HR"),
+    (2, "Bob", "Finance"),
+    (3, "Charlie", "HR"),
+    (4, "David", "IT"),
+    (5, "Eve", "Finance"),
+    (6, "Frank", "IT"),
+    (7, "Grace", "HR"),
+    (8, "Helen", "Finance")
+]
+
+columns = ["id", "name", "department"]
+
+df = spark.createDataFrame(data, columns)
+
+#RePartition By Dept 
+df_repart = df.repartition("department")
+
+#Count RePartition 
+print("Total Partitions:", df_repart.rdd.getNumPartitions())
+---------------------------------------------------------------------------------------------------
+Observe how repartition triggers shuffle.
+
+df = spark.range(0, 1000000).withColumnRenamed("id", "number")
+
+#Check Original Partition Count 
+print("Before repartition →", df.rdd.getNumPartitions())
+
+#Repartition
+df_repart = df.repartition(8)
+
+# Observe physical plan
+df_repart.explain(True)
+---------------------------------------------------------------------------------------------------
+Use .rdd.getNumPartitions() to check partitions.
+
+df = spark.range(0, 1001)
+
+#To Check The Partition 
+print("Partitions:- ", df.rdd.getNumPartitions())
+==================================================================================================================================
+# **COALESCE**
+---------------------------------------------------------------------------------------------------
+Use .coalesce(1) to reduce partitions to 1 and write to a single file.
+
+data = [(1, "Alice"), (2, "Bob"), (3, "Charlie"), (4, "David")]
+columns = ["id", "name"]
+
+df = spark.createDataFrame(data, columns)
+
+#Coalesce the Partition 
+df_single = df.coalesce(1)
+
+#Write To CSV File 
+df_single.write.mode("overwrite").csv("coal1.csv", header = True)
+---------------------------------------------------------------------------------------------------
+Explain difference between repartition() and coalesce() practically.
+
+| Action                            | `.repartition()`      | `.coalesce()`         |
+| --------------------------------- | --------------------- | --------------------- |
+| Increase partitions (e.g., 2 → 6) | ✅ Works, shuffles     | ❌ Not applicable      |
+| Decrease partitions (e.g., 6 → 2) | ✅ Works, shuffles     | ✅ Better (no shuffle) |
+| Write to single output file       | Use `.coalesce(1)`    | Best option           |
+| Optimize parallel processing      | Use `.repartition(n)` | Not useful            |
+--------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+Use .coalesce(2) after filtering and before writing to reduce output files.
+
+data = [(1, "Alice", 3000),
+        (2, "Bob", 6000),
+        (3, "Charlie", 7000),
+        (4, "David", 4500),
+        (5, "Eve", 5200),
+        (6, "Frank", 8000)]
+
+columns = ["id", "name", "salary"]
+
+df = spark.createDataFrame(data, columns)
+
+#Apply Filter 
+# Filter employees with salary > 5000
+filtered_df = df.filter(df.salary > 5000)
+
+#Coalesced to 2 Partition 
+coalesced_df = filtered_df.coalesce(2)
+
+#Write To CSV File 
+df_single.write.mode("overwrite").csv("coal2.csv", header = True)
+---------------------------------------------------------------------------------------------------
+Check physical plan of .coalesce() using .explain().
+
+df = spark.range(0, 1000)
+
+#Coalesce to 2 Partition 
+df_coalesce = df.coalesce(2)
+
+#Use .explain(True) to See Plan
+df_coalesce.explain(True)
+---------------------------------------------------------------------------------------------------
+Use .coalesce() in a DataFrame write operation for efficient output.
+
+data = [
+    (1, "Alice", 3000),
+    (2, "Bob", 4500),
+    (3, "Charlie", 5200),
+    (4, "David", 6100),
+    (5, "Eve", 4800),
+    (6, "Frank", 7000)
+]
+columns = ["id", "name", "salary"]
+
+df = spark.createDataFrame(data, columns)
+
+#Apply Coalesce
+df_coalesced = df.coalesce(2)
+
+#Write to Disk 
+df_coalesced.write.mode("overwrite").csv("coal3.csv", header = True)
+===================================================================================================================================
+# **BROADCAST JOIN**
+---------------------------------------------------------------------------------------------------
+Perform a broadcast join between a small and large DataFrame.
+
+# Large DataFrame (1 million rows)
+large_df = spark.range(1, 1000001).withColumnRenamed("id", "customer_id")
+
+# Small DataFrame (only 5 rows)
+small_data = [(1, "Alice"), (2, "Bob"), (3, "Charlie"), (4, "David"), (5, "Eve")]
+small_df = spark.createDataFrame(small_data, ["customer_id", "name"])
+
+#Perform BrodCast Join 
+joined_df = large_df.join(broadcast(small_df), on="customer_id", how="inner")
+joined_df.show()
+---------------------------------------------------------------------------------------------------
+Use broadcast() function from pyspark.sql.functions.
+
+#Large DataFrame
+large_df = spark.range(1, 1000001).withColumnRenamed("id", "user_id")
+
+#Small Lookup DataFrame
+lookup_data = [(1, "Alice"), (2, "Bob"), (3, "Charlie"), (4, "David"), (5, "Eve")]
+lookup_df = spark.createDataFrame(lookup_data, ["user_id", "user_name"])
+
+#Perform Join 
+joined_df = large_df.join(broadcast(lookup_df), on="user_id", how="inner")
+joined_df.show()
+---------------------------------------------------------------------------------------------------
+Show how broadcast join avoids shuffle.
+
+| Join Type        | Shuffle Required? | Explain Output (Physical Plan)                |
+| ---------------- | ----------------- | --------------------------------------------- |
+| ❌ Regular Join   | ✅ Yes (on both)   | `SortMergeJoin`, `Sort`, `Exchange` stages    |
+| ✅ Broadcast Join | ❌ No shuffle      | `BroadcastHashJoin`, `BroadcastExchange` only |
+------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+
+Compare performance of normal join vs broadcast join.
+
+| Metric                   | Normal Join   | Broadcast Join    |
+| ------------------------ | ------------- | ----------------- |
+| Execution time (example) | 3.85 sec      | 0.45 sec          |
+| Shuffle                  | ✅ Yes         | ❌ No              |
+| Plan (in `.explain()`)   | SortMergeJoin | BroadcastHashJoin |
+| Performance              | Slow          | 🚀 Very Fast      |
+-------------------------------------------------------------------
+===================================================================================================================================
+# **ERROR HANDLING**
+
+Try to read a non-existing file and handle the exception gracefully.
+
+from pyspark.sql import SparkSession
+from pyspark.sql.utils import AnalysisException
+
+spark = SparkSession.builder.appName("Handle File Not Found").getOrCreate()
+
+try:
+    # Try to read a non-existent CSV file
+    df = spark.read.option("header", True).csv("non_existing_file.csv")
+    df.show()
+
+except AnalysisException as ae:
+    print("❌ File not found. Please check the file path.")
+    print("👉 Error details:", ae)
+
+except Exception as e:
+    print("⚠️ Some other error occurred.")
+    print("👉", e)
+---------------------------------------------------------------------------------------------------
+Use DataFrame.na.fill() to handle null values before processing.
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("Handle Nulls").getOrCreate()
+
+data = [
+    (1, "Alice", 3000),
+    (2, "Bob", None),
+    (3, None, 4000),
+    (4, "David", None)
+]
+columns = ["id", "name", "salary"]
+
+df = spark.createDataFrame(data, columns)
+df.show()
+---------------------------------------------------------------------------------------------------
+Log the error in a file if transformation fails.
+
+#Step 1: Import Required Modules
+
+from pyspark.sql import SparkSession
+import logging
+import datetime
+
+
+#Setup Loging COnfiguration 
+# Create logger
+log_file = f"error_log_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+logging.basicConfig(
+    filename=log_file,
+    filemode='w',
+    level=logging.ERROR,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+#Start SparkSession
+spark = SparkSession.builder.appName("Log Transformation Errors").getOrCreate()
+
+#Create Sample DataFrame
+data = [(1, "Alice", 3000), (2, "Bob", 4000)]
+df = spark.createDataFrame(data, ["id", "name", "salary"])
+
+
+#Try Faulty Transformation Log Error 
+try:
+    # Intentional error: using wrong column name "sallary" instead of "salary"
+    df2 = df.withColumn("bonus", df["sallary"] * 0.1)
+    df2.show()
+
+except Exception as e:
+    logging.error("Transformation failed due to error: %s", str(e))
+    print("❌ Error occurred during transformation. Check log file for details.")
+
+====================================================================================================================================
+# **SCHEMA EVOLUTION**
+
+Read two JSON files with slightly different schemas and merge them using mergeSchema=True.
+
+#File1.json
+ {"id": 1, "name": "Alice"}
+{"id": 2, "name": "Bob"}
+
+#File2.json
+{"id": 3, "age": 25}
+{"id": 4, "age": 30}
+
+
+# Read with mergeSchema = True
+df = spark.read.option("mergeSchema", "true").json("path/to/json_files/")
+df.show()
+df.printSchema()
+---------------------------------------------------------------------------------------------------
+Write a DataFrame to Parquet and add a new column in the next write.
+
+
+data1 = [(1, "Alice"), (2, "Bob")]
+df1 = spark.createDataFrame(data1, ["id", "name"])
+
+# Write to Parquet
+df1.write.mode("overwrite").parquet("output/parquet_data/")
+
+data2 = [(3, "Charlie", 25), (4, "David", 30)]
+df2 = spark.createDataFrame(data2, ["id", "name", "age"])
+
+# Append with new column (age)
+df2.write.mode("append").option("mergeSchema", "true").parquet("output/parquet_data/")
+
+#Read Final Data 
+final_df = spark.read.option("mergeSchema", "true").parquet("output/parquet_data/")
+final_df.show()
+final_df.printSchema()
+---------------------------------------------------------------------------------------------------
+Handle schema mismatch error using safe read logic.
+
+
+spark = SparkSession.builder.appName("Safe Schema Read").getOrCreate()
+
+# Logging setup (optional but useful)
+logging.basicConfig(
+    filename="schema_mismatch.log",
+    filemode='a',
+    level=logging.ERROR,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+
+#Try To Read With Expected Schema
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+expected_schema = StructType([
+    StructField("id", IntegerType(), True),
+    StructField("name", StringType(), True),
+    StructField("age", IntegerType(), True)
+])
+
+
+------------------------------------------------------------
+| Problem               | Solution                        |
+| --------------------- | ------------------------------- |
+| Schema mismatch       | Use `try-except` block          |
+| Recover from error    | Use fallback like `inferSchema` |
+| Logging for debugging | Use Python `logging` module     |
+| Strongly typed reads  | Use `.schema(expected_schema)`  |
+-------------------------------------------------------------
+===================================================================================================================================
