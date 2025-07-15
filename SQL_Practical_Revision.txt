@@ -1,0 +1,504 @@
+/*create database All_Topics;
+use All_Topics;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+#Creating Table Named Students:-
+--------------------------------------
+Create table Students(
+  Id INT PRIMARY KEY,
+  Name VARCHAR(50),
+  Age INT,
+  Grade VARCHAR(5),
+  Gender VARCHAR(10)
+);
+---------------------------------------------
+#Inserting Values Into Table:-
+----------------------------------------------
+INSERT INTO STUDENTS VALUES
+(1, 'Amar Rathod', 19, 'C', 'Male'),
+(2, 'Jorge Sullivan', 20, 'E', 'Female'),
+(3, 'Elizabeth Woods', 22, 'C', 'Female'),
+(4, 'Susan Wagner', 21, 'E', 'Male'),
+(5, 'Peter Montgomery', 24, 'B', 'Female'),
+(6, 'Theodore Mcgrath', 18, 'A', 'Female'),
+(7, 'Stephanie Collins', 24, 'E', 'Male'),
+(8, 'Stephanie Sutton', 20, 'A', 'Male'),
+(9, 'Brian Hamilton', 21, 'D', 'Male'),
+(10, 'Susan Levy', 21, 'D', 'Female'),
+(11, 'Sean Green', 25, 'B', 'Female'),
+(12, 'Kimberly Smith', 23, 'E', 'Female'),
+(13, 'Jennifer Summers', 16, 'E', 'Male'),
+(14, 'April Snyder', 17, 'D', 'Male'),
+(15, 'Dana Nguyen', 25, 'D', 'Female'),
+(16, 'Cheryl Bradley', 19, 'C', 'Male'),
+(17, 'Walter Pratt', 19, 'E', 'Male'),
+(18, 'Bobby Flores', 19, 'B', 'Female'),
+(19, 'Tasha Rodriguez', 17, 'A', 'Female'),
+(20, 'Michelle Kelley', 24, 'D', 'Male'),
+(21, 'Kimberly Maynard', 20, 'E', 'Female'),
+(22, 'Laurie Wallace', 17, 'E', 'Female'),
+(23, 'Janice Johnston', 24, 'B', 'Female'),
+(24, 'Collin Lopez', 23, 'A', 'Female'),
+(25, 'Mary Alvarez', 21, 'E', 'Male'),
+(26, 'Peter Mcdowell', 20, 'B', 'Male'),
+(27, 'Sarah Villanueva', 18, 'A', 'Female'),
+(28, 'Kimberly Myers', 23, 'A', 'Male'),
+(29, 'Desiree Cain', 18, 'B', 'Male'),
+(30, 'Stephanie Lawrence', 17, 'E', 'Female');
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+1. Basics:- SELECT, WHERE, ORDER BY
+Table: Students(id, name, age, grade, gender)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+1. Retrieve all records.
+Select * From Students;
+
+2. Get the names of all students.
+Select Name from Students;
+
+3. Find all students older than 18.
+Select * from Students Where Age > 18;
+
+4. List students in descending order of age.
+Select * From Students order by Age DESC;
+
+5. Show all female students.
+Select * from Students where Gender = "Female"
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+#Create Table Name SALES:- 
+----------------------------------
+CREATE TABLE SALES
+(
+	Order_id INT Primary Key,
+	Customer_id INT,
+	Amount Decimal(10,2),
+	Order_Date Date
+);
+------------------------------------------------
+#Inserting Values into Table:- 
+-------------------------------------------------
+INSERT INTO SALES VALUES
+(1, 17, 1450.61, '2024-03-01'),
+(2, 7, 4485.69, '2024-05-30'),
+(3, 14, 2940.51, '2024-04-25'),
+(4, 16, 3335.2, '2024-04-01'),
+(5, 3, 1689.19, '2024-01-30'),
+(6, 16, 2976.67, '2024-03-26'),
+(7, 7, 1290.87, '2024-03-10'),
+(8, 4, 3556.13, '2024-04-05'),
+(9, 6, 1729.43, '2024-01-16'),
+(10, 4, 3937.28, '2024-02-26'),
+(11, 2, 4103.89, '2024-05-16'),
+(12, 20, 3434.89, '2024-01-07'),
+(13, 4, 3211.5, '2024-05-27'),
+(14, 4, 2016.93, '2024-04-04'),
+(15, 4, 278.32, '2024-01-06'),
+(16, 7, 4809.05, '2024-02-17'),
+(17, 4, 2448.24, '2024-01-16'),
+(18, 1, 2766.75, '2024-01-26'),
+(19, 9, 443.02, '2024-01-19'),
+(20, 10, 1816.44, '2024-02-16'),
+(21, 2, 2567.82, '2024-01-11'),
+(22, 20, 594.51, '2024-04-10'),
+(23, 7, 1374.65, '2024-04-30'),
+(24, 19, 930.18, '2024-02-22'),
+(25, 2, 3964.38, '2024-02-10'),
+(26, 6, 1777.33, '2024-03-05'),
+(27, 4, 3024.28, '2024-04-23'),
+(28, 6, 164.7, '2024-04-14'),
+(29, 19, 4386.54, '2024-03-20'),
+(30, 12, 2004.35, '2024-03-05');
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+2. Aggregate Functions: COUNT, SUM, AVG, MIN, MAX
+Table: Sales(order_id, customer_id, amount, order_date)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+1.  Count total number of orders.
+	Select count(order_id) as Total_Orders from Sales;
+    
+2. 	Find the total sales amount.
+	Select Sum(amount) as Total_Sales from Sales; 
+    
+3.  Get average order amount.
+	Select avg(amount) as Avg_Amount from Sales;
+    
+4.  Find the highest and lowest sale.
+	Select min(amount) as Lowest_sale, max(amount) as Highest_sale from Sales;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+3. GROUP BY and HAVING:- 
+Table: Sales(order_id, customer_id, amount, order_date)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+1.  Find total sales per customer.
+	Select customer_id, Sum(amount) as Total_Sales from Sales group by customer_id;
+    
+2. 	Count orders per day.
+	Select order_date, count(order_id) as Order_per_Day from Sales group by order_date;
+    
+3. 	Show customers who have spent more than ₹10,000.
+	Select customer_id, sum(amount) as Total_Amount_Spend from Sales group by customer_id Having sum(amount) > 10000;
+    
+4.  Find the average order amount per customer.
+	Select customer_id, avg(amount) as Avg_Order_Amount from Sales group by customer_id;
+    
+5.  Show the total sales for each order date.
+	Select order_date, Sum(amount)as Total_Sales from Sales group by order_date;
+    
+6.  List customers who placed more than 5 orders.
+	Select customer_id, count(order_id)as Order_Placed from Sales group by customer_id Having count(order_id) > 5;
+    
+7. 	Show the highest order amount per customer.
+	Select customer_id, MAX(amount) as Highest_Order_Amount from Sales group By customer_id order by Highest_Order_Amount DESC;
+    
+8.  Find customers whose average order amount is less than ₹500.
+	Select customer_id, avg(amount)as Avg_Order_Amount from Sales group by customer_id Having avg(amount) < 500;
+    
+9. 	Show dates where total sales exceeded ₹5,000.
+	Select order_date, sum(amount)as Total_Sales from Sales group By order_date Having sum(amount) > 5000;
+    
+10. List customers who placed orders on more than 3 different dates.
+	Select customer_id, count(Distinct order_date) as Unique_Order_Dates from Sales group by customer_id Having count(Distinct order_date) > 3;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+# Create Table Name Customer:- 
+------------------------------------------------------------------------------
+CREATE TABLE Customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+--------------------------------------------------------------------------------
+#Insert Data Into Customer:- 
+-------------------------------------------------------------------------------
+INSERT INTO Customers VALUES 
+(1, 'Lauren Hayes'),
+(2, 'Whitney Stark'),
+(3, 'Angela Salazar'),
+(4, 'Mr. Ryan Sanchez'),
+(5, 'Autumn Robinson'),
+(6, 'Faith Cabrera'),
+(7, 'Charles Wolfe'),
+(8, 'Kenneth Kent'),
+(9, 'Melanie Johnson'),
+(10, 'Lisa Johnston'),
+(11, 'Jacob Hooper'),
+(12, 'Alex Woodward'),
+(13, 'Caleb Clark'),
+(14, 'Taylor Johnson'),
+(15, 'Brian Green'),
+(16, 'Matthew Bell'),
+(17, 'Jonathan Williams'),
+(18, 'William Gonzalez'),
+(19, 'Nicholas Massey'),
+(20, 'Caroline Chambers');
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+# Create Table Orders:- 
+-----------------------------------------------------------------------------------------
+CREATE TABLE Orders (
+    id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(id)
+);
+---------------------------------------------------------------------------------------------
+#Insert Data Into Orders:- 
+---------------------------------------------------------------------------------------------
+INSERT INTO Orders VALUES 
+(1, 5, '2024-05-23'),
+(2, 1, '2024-04-27'),
+(3, 3, '2024-03-26'),
+(4, 2, '2024-05-19'),
+(5, 9, '2024-02-04'),
+(6, 8, '2024-05-03'),
+(7, 12, '2024-03-14'),
+(8, 12, '2024-02-03'),
+(9, 10, '2024-04-09'),
+(10, 14, '2024-01-21'),
+(11, 1, '2024-02-19'),
+(12, 11, '2024-02-10'),
+(13, 8, '2024-02-27'),
+(14, 15, '2024-04-06'),
+(15, 19, '2024-04-16'),
+(16, 2, '2024-04-12'),
+(17, 19, '2024-04-17'),
+(18, 2, '2024-02-12'),
+(19, 15, '2024-01-17'),
+(20, 9, '2024-02-10'),
+(21, 15, '2024-05-15'),
+(22, 16, '2024-05-23'),
+(23, 20, '2024-01-01'),
+(24, 2, '2024-05-06'),
+(25, 11, '2024-03-20'),
+(26, 15, '2024-01-13'),
+(27, 14, '2024-02-18'),
+(28, 18, '2024-01-22'),
+(29, 5, '2024-01-04'),
+(30, 13, '2024-04-16');
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+4. JOINS (INNER, LEFT, RIGHT, FULL)
+Tables:
+	1. Customers(id, name)
+	2. Orders(id, customer_id, order_date)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+
+Ques 1. Get all customers and their orders (INNER JOIN).
+		Select customers.id as Customer_ID, customers.name as Customer_Name,
+		orders.id as Order_Id, orders.order_date 
+        from customers 
+        INNER JOIN 
+        orders 
+        On customers.id = orders.customer_id;
+        
+Ques 2. List all customers even if they haven’t ordered (LEFT JOIN).
+		Select customers.id as Customer_Id, customers.name as Customer_Name,
+        orders.id as Order_id, orders.order_date
+        from customers 
+        LEFT JOIN 
+        orders 
+        on customers.id = orders.customer_id;
+        
+Ques 3.	Show all orders even without matching customers (RIGHT JOIN).
+		Select customers.id as Customer_Id, customers.name as Customer_Name,
+        orders.id as Order_Id, orders.order_date
+        from customers 
+        RIGHT JOIN 
+        orders 
+        On customers.id = orders.customer_id;
+        
+Ques 4. Full list of all customers and orders
+		SELECT Customers.id AS customer_id, Customers.name AS customer_name,
+		Orders.id AS order_id, Orders.order_date
+        FROM Customers 
+        FULL OUTER JOIN 
+		Orders 
+        ON Customers.id = Orders.customer_id;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+5. Subqueries:- 
+Table: Employees(id, name, salary, department_id)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+# Create Table Name:- Employees
+------------------------------------------
+CREATE TABLE Employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    salary DECIMAL(10,2),
+    department_id INT
+);
+------------------------------------------------
+#Insert Data Into Employees:- 
+------------------------------------------------
+INSERT INTO Employees VALUES
+(1, 'Amy Lowe', 38970.63, 2),
+(2, 'Gloria King', 20857.48, 1),
+(3, 'Jessica Thompson', 78814.68, 5),
+(4, 'Jason Carroll', 56723.72, 2),
+(5, 'Emily Howard', 27134.23, 2),
+(6, 'Danielle Castro', 72419.23, 3),
+(7, 'Patrick Rogers', 61312.4, 2),
+(8, 'Douglas Allen', 26010.84, 4),
+(9, 'Heather Roberts', 57658.35, 1),
+(10, 'Travis Schultz', 36482.83, 4),
+(11, 'Michelle Hughes', 67989.47, 1),
+(12, 'Matthew Smith', 71681.59, 2),
+(13, 'George Allen', 59214.02, 3),
+(14, 'Jamie Hutchinson', 26906.56, 2),
+(15, 'Jennifer Morales', 36704.59, 1),
+(16, 'Jennifer Bates', 22537.86, 2),
+(17, 'Jeremy Green', 60859.81, 5),
+(18, 'Joseph Freeman', 38882.79, 3),
+(19, 'Nicole Henson', 76306.33, 1),
+(20, 'Eric Owens PhD', 70781.6, 5),
+(21, 'Robin Lopez', 59321.71, 4),
+(22, 'Miss Angela Swanson DVM', 58408.47, 3),
+(23, 'Michael Stewart', 72284.64, 2),
+(24, 'Mitchell Smith', 32470.65, 5),
+(25, 'Kelsey Davis', 37462.13, 2),
+(26, 'Matthew Russo', 29061.39, 3),
+(27, 'William Garcia', 40250.66, 3),
+(28, 'Jennifer Miller', 63109.97, 3),
+(29, 'Jesse Sparks', 66765.01, 1),
+(30, 'Brandi Meyer', 22472.18, 2);
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+
+Q1. Show all columns and all records from the Employees table.
+	Select * from Employees; 
+
+Q2. List the employees whose salary is greater than the average salary of all employees.
+	Select id, name, salary, department_id from Employees where salary > (Select avg(Salary) from Employees);
+    
+Q3. Get the names of all employees who are in the same department as 'Amy Lowe'.
+	Select name, department_id from Employees where department_id = (Select department_id from Employee where name = 'Amy Lowe');
+    
+Q4. Find the department(s) which have the highest average salary among all departments.
+	Select department_id from Employees group by department_id Having avg(salary) = 
+    (SELECT max(salary) from (Select department_id, avg(Salary) As AVG_Salary
+    from Employees group by department_id)
+    as Dept_Avg);
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+*🏷️ 6. String Functions
+Table: Users(id, full_name, email)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+#Create Table Name Users:-
+-----------------------------------------------------------------------------
+CREATE TABLE Users (
+    id INT PRIMARY KEY,
+    full_name VARCHAR(100),
+    email VARCHAR(100)
+);
+-----------------------------------------------------------------------------
+#Insert Values into Users:-
+-----------------------------------------------------------------------------
+INSERT INTO Users VALUES 
+(1, 'Hannah Wiggins', 'williamsjamie@yahoo.com'),
+(2, 'Theresa Mays', 'djoseph@graham.biz'),
+(3, 'Alexa Hernandez', 'kristine15@hotmail.com'),
+(4, 'Derrick Hernandez', 'ralph82@yahoo.com'),
+(5, 'Nicholas Peck', 'melodychandler@yahoo.com'),
+(6, 'Gary Perry', 'zwells@martinez-wilson.info'),
+(7, 'Eric Navarro', 'courtneybennett@miller.com'),
+(8, 'Adam Long', 'ymora@hotmail.com'),
+(9, 'Claudia Miller', 'brenda26@howard.com'),
+(10, 'Jocelyn Rhodes', 'nsanders@williams.com'),
+(11, 'Jimmy Ward', 'hintontonya@elliott.biz'),
+(12, 'Kathleen Stark', 'obolton@hotmail.com'),
+(13, 'Kimberly Velazquez', 'janice55@warren.org'),
+(14, 'Sarah Aguilar', 'marshzachary@gmail.com'),
+(15, 'Carlos Turner', 'michelle27@yahoo.com'),
+(16, 'Stephanie Shaw', 'burgessrebecca@roberts.biz'),
+(17, 'Karen Gibbs', 'melissayates@hotmail.com'),
+(18, 'Natalie Turner', 'cameron44@yahoo.com'),
+(19, 'James Martin', 'justingreer@mcmahon.biz'),
+(20, 'Steve Guzman', 'lisagomez@carr.info'),
+(21, 'John Hernandez', 'crystalgarcia@banks.info'),
+(22, 'Antonio Haynes', 'montesjennifer@yahoo.com'),
+(23, 'Bethany Buck', 'stonekristen@gmail.com'),
+(24, 'James Watson', 'okelly@huber.info'),
+(25, 'Alexander Meyer', 'claytonweiss@chan.com'),
+(26, 'Brianna Snow', 'wallsrobert@gmail.com'),
+(27, 'Christopher Blevins', 'bparks@yahoo.com'),
+(28, 'Tonya Sharp', 'chad50@bailey-smith.com'),
+(29, 'Andrea Barry', 'harrisemily@adkins.com'),
+(30, 'Tasha Hall', 'shawnwoods@haley.com');
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+Q1. Get length of each user’s name.
+	SELECT id, full_name,
+    LENGTH(full_name) AS name_length
+	FROM Users;
+    
+Q2. Extract domain from email.
+	SELECT id, email,
+    SUBSTRING(email, INSTR(email, '@') + 1) AS domain
+	FROM Users;
+    
+Q3. Convert names to uppercase.
+	SELECT id, full_name,
+    UPPER(full_name) AS uppercase_name
+	FROM Users;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+7. Date Functions
+Table: Orders(id, order_date, delivery_date)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+Q1. Get all orders placed this month.
+	SELECT * FROM Orders
+	WHERE MONTH(order_date) = MONTH(CURRENT_DATE)
+	AND YEAR(order_date) = YEAR(CURRENT_DATE);
+
+Q2. Calculate delivery time in days.
+	SELECT id, DATEDIFF(delivery_date, order_date) AS delivery_days
+	FROM Orders;
+
+Q3. List orders delivered late (delivery_date > expected_date)
+	SELECT * FROM Orders
+	WHERE delivery_date > expected_date;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+8. INSERT, UPDATE, DELETE
+Table: Products(id, name, price, stock)
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+#Create Table Name:- Products
+----------------------------------------------------------------------------
+CREATE TABLE Products (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2),
+    stock INT
+);
+----------------------------------------------------------------------------
+#Insert Values into Table:- 
+----------------------------------------------------------------------------
+INSERT INTO Products (id, name, price, stock) VALUES
+(1, 'Wireless Mouse', 799.00, 50),
+(2, 'Mechanical Keyboard', 2299.00, 30),
+(3, 'HD Monitor 24"', 7999.00, 20),
+(4, 'USB-C Cable', 299.00, 100),
+(5, 'Laptop Stand', 1499.00, 40),
+(6, 'Noise Cancelling Headphones', 3999.00, 25),
+(7, 'External Hard Drive 1TB', 4499.00, 15),
+(8, 'Bluetooth Speaker', 1299.00, 35),
+(9, 'Smartphone Tripod', 499.00, 60),
+(10, 'Webcam 1080p', 1999.00, 18),
+(11, 'Gaming Mouse Pad', 699.00, 50),
+(12, 'Ethernet Cable 5m', 199.00, 80),
+(13, 'Power Bank 10000mAh', 1199.00, 45),
+(14, 'LED Desk Lamp', 999.00, 20),
+(15, 'Wireless Charger', 1499.00, 30),
+(16, 'Mini Projector', 5599.00, 10),
+(17, 'Smartwatch', 6499.00, 12),
+(18, 'HDMI Cable 2m', 299.00, 90),
+(19, 'Laptop Backpack', 1899.00, 22),
+(20, 'USB Hub 4-Port', 499.00, 55),
+(21, 'Monitor Arm Mount', 2899.00, 8),
+(22, 'Tabletop Microphone', 2499.00, 16),
+(23, 'Portable SSD 512GB', 6499.00, 9),
+(24, 'Laptop Cooling Pad', 899.00, 35),
+(25, 'Wireless Earbuds', 2999.00, 27),
+(26, 'Cable Organizer', 149.00, 120),
+(27, 'Surge Protector', 799.00, 40),
+(28, 'Graphics Tablet', 4999.00, 5),
+(29, 'Desktop Speakers', 1599.00, 14),
+(30, 'VR Headset', 19999.00, 0);
+🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜🔜
+Q1. Increase price by 10% for all products.
+	UPDATE PRODUCTS
+	SET PRICE = PRICE * 1.10;
+    
+Q2. Delete products with zero stock.
+	DELETE FROM PRODUCTS
+	WHERE stock > 0;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+9. Views and Indexes
+Table: Use Sales again
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+Q1. Create a view to show monthly total sales.
+	CREATE VIEW MonthlySales AS
+	SELECT
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(quantity * price) AS total_sales
+	FROM Sales
+	GROUP BY DATE_FORMAT(order_date, '%Y-%m');
+    
+Q2. Create an index on order_date.
+	CREATE INDEX idx_order_date ON Sales(order_date);
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+10. Stored Procedures & Functions (Optional/Advanced):- 
+🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱🔱
+Q1. Write a procedure to insert a new employee.
+	CREATE OR REPLACE PROCEDURE InsertEmployee (
+    emp_id INT,
+    emp_name STRING,
+    emp_salary NUMBER(10, 2),
+    dept_id INT
+	)
+	RETURNS STRING
+	LANGUAGE SQL
+	AS
+	$$
+	BEGIN
+			INSERT INTO Employees (id, name, salary, department_id)
+			VALUES (emp_id, emp_name, emp_salary, dept_id);
+			RETURN 'Employee inserted successfully';
+	END;
+	$$;
+----------------------------------------------------------------------------------
+Q2. Create a function to calculate annual salary.
+	CREATE OR REPLACE FUNCTION GetAnnualSalary(monthly_salary NUMBER(10, 2))
+	RETURNS NUMBER(10, 2)
+	LANGUAGE SQL
+	AS
+	$$
+		SELECT monthly_salary * 12;
+	$$;
+🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢*/
